@@ -16,3 +16,27 @@ services:
     container_name: netflix_redis
     ports:
       - "6379:6379"
+
+  minio:
+    image: minio/minio
+    container_name: netflix_minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+  nginx:
+    image: nginx:latest
+    container_name: netflix_nginx
+    ports:
+      - "8088:8080"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./videos:/data/videos:ro
+
+volumes:
+  minio_data:

@@ -1,5 +1,7 @@
 import { S3Client } from "@aws-sdk/client-s3";
 
+export const BUCKET_NAME = "videos";
+
 export const s3 = new S3Client({
   region: "us-east-1",
   endpoint: "http://localhost:9000",
@@ -7,7 +9,5 @@ export const s3 = new S3Client({
     accessKeyId: "minioadmin",
     secretAccessKey: "minioadmin",
   },
-  forcePathStyle: true, // REQUIRED for MinIO
+  forcePathStyle: true,
 });
-
-export const BUCKET_NAME = "videos";

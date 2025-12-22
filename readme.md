@@ -186,3 +186,13 @@ curl http://localhost:4000/api/watch/continue \
   }
 ]
 ```
+## Mental Model (Very Important)
+
+Environment	Access Pattern
+
+Local dev	Public bucket
+Production	Signed URLs
+Enterprise	CDN + signed URLs
+
+You’re currently in local dev mode.
+```

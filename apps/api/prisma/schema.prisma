@@ -6,18 +6,21 @@ datasource db {
   provider = "postgresql"
 }
 
-/* ========= AUTH MODELS ========= */
+/**
+ * ========= AUTH MODELS =========
+ */
 
 model User {
-  id            String   @id @default(uuid())
-  email         String   @unique
-  passwordHash  String
-  name          String
-  isActive      Boolean  @default(true)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  refreshTokens RefreshToken[]
+  refreshTokens  RefreshToken[]
+  watchHistories WatchHistory[]
 }
 
 model RefreshToken {
@@ -28,28 +31,32 @@ model RefreshToken {
   expiresAt DateTime
   createdAt DateTime @default(now())
 }
-/* ==========add_movies_and_genres=============== */
+
+/**
+ * ==========add_movies_and_genres===============
+ */
 
 model Movie {
-  id           String   @id @default(uuid())
+  id           String  @id @default(uuid())
   title        String
   description  String
-  duration     Int      // seconds
+  duration     Int // seconds
   releaseYear  Int
-  rating       Float    // IMDb-like
+  rating       Float // IMDb-like
   thumbnailUrl String
   videoUrl     String
-  isPublished  Boolean  @default(false)
+  isPublished  Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  genres MovieGenre[]
+  genres         MovieGenre[]
+  watchHistories WatchHistory[]
 }
 
 model Genre {
-  id    String @id @default(uuid())
-  name  String @unique
+  id   String @id @default(uuid())
+  name String @unique
 
   movies MovieGenre[]
 }
@@ -64,3 +71,20 @@ model MovieGenre {
   @@id([movieId, genreId])
 }
 
+model WatchHistory {
+  id      String @id @default(uuid())
+  userId  String
+  movieId String
+
+  progressSec Int // last watched position (seconds)
+  durationSec Int // total duration (seconds)
+  completed   Boolean @default(false)
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  movie Movie @relation(fields: [movieId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, movieId])
+}

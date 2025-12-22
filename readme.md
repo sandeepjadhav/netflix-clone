@@ -1,10 +1,8 @@
-
 1. docker compose -f infra/docker-compose.yml up -d
 
-
-2. http://localhost:9001/login  (2️⃣ MinIO Console)
-    user: minioadmin
-    pass: minioadmin
+2. http://localhost:9001/login (2️⃣ MinIO Console)
+   user: minioadmin
+   pass: minioadmin
 
 3. CD apps/api$ npm run dev
 
@@ -132,4 +130,59 @@ Expected Response
 Movie ID exists?
   curl http://localhost:4000/api/movies
 
+```
+
+1. Save Playback Progress
+
+Frontend calls this every 10–15 seconds.
+
+```bash
+curl -X POST http://localhost:4000/api/watch/progress \
+-H "Authorization: Bearer ACCESS_TOKEN" \
+-H "Content-Type: application/json" \
+-d '{
+  "movieId": "MOVIE_ID",
+  "progressSec": 120,
+  "durationSec": 3600
+}'
+
+```
+
+# ⏯️ 2. Resume Playback
+
+```bash
+curl http://localhost:4000/api/watch/resume/MOVIE_ID \
+-H "Authorization: Bearer ACCESS_TOKEN"
+
+```
+## Response
+```json
+{
+  "progressSec": 120,
+  "durationSec": 3600,
+  "completed": false
+}
+```
+
+# 3. Continue Watching (Netflix Row)
+
+```bash
+curl http://localhost:4000/api/watch/continue \
+-H "Authorization: Bearer ACCESS_TOKEN"
+
+```
+
+## Response
+
+```json
+[
+  {
+    "movie": {
+      "id": "MOVIE_ID",
+      "title": "Batman Begins",
+      "thumbnailUrl": "..."
+    },
+    "progressSec": 120
+  }
+]
 ```

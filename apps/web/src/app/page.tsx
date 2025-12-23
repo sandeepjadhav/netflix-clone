@@ -1,13 +1,18 @@
+import HeroBanner from "@/components/hero-banner";
 import ContinueWatchingRow from "@/components/continue-watching-row";
+import MovieRows from "@/components/movie-rows";
 
 export default function HomePage() {
   return (
-    <main className="p-6 space-y-10">
-      <h1 className="text-3xl font-bold text-white">
-        Home
-      </h1>
+    <main className="bg-black min-h-screen">
+      {/* Hero */}
+      <HeroBanner />
 
-      <ContinueWatchingRow />
+      {/* Content */}
+      <div className="relative z-20 px-6 space-y-12 -mt-32">
+        <ContinueWatchingRow />
+        <MovieRows />
+      </div>
     </main>
   );
 }
